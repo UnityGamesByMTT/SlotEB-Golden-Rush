@@ -327,11 +327,11 @@ public class UIManager : MonoBehaviour
 
     private void StartPopupAnim(double amount)
     {
-        int initAmount = 0;
+        double initAmount = 0;
         if (WinPopup_Object) WinPopup_Object.SetActive(true);
         if (MainPopup_Object) MainPopup_Object.SetActive(true);
 
-        DOTween.To(() => initAmount, (val) => initAmount = val, (int)amount, 5f).OnUpdate(() =>
+        DOTween.To(() => initAmount, (val) => initAmount = val, amount, 5f).OnUpdate(() =>
         {
             if (Win_Text) Win_Text.text = initAmount.ToString();
         });
