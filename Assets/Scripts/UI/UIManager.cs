@@ -37,6 +37,8 @@ public class UIManager : MonoBehaviour
     private Button Terms_Button;
     [SerializeField]
     private Button Privacy_Button;
+    [SerializeField]
+    private Button megaWin_Disable;
 
     [SerializeField]
     private Button Exit_Button;
@@ -98,7 +100,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Image Win_Image;
     [SerializeField]
-    private GameObject WinPopup_Object;
+    internal GameObject WinPopup_Object;
     [SerializeField]
     private TMP_Text Win_Text;
 
@@ -184,6 +186,8 @@ public class UIManager : MonoBehaviour
     private bool isExit = false;
 
     private int FreeSpins;
+    private Tween megawin_TweenOne;
+    private Tween megawin_TweenTwo;
 
     private void Awake()
     {
@@ -235,6 +239,9 @@ public class UIManager : MonoBehaviour
 
         //if (AboutExit_Button) AboutExit_Button.onClick.RemoveAllListeners();
         //if (AboutExit_Button) AboutExit_Button.onClick.AddListener(delegate { ClosePopup(AboutPopup_Object); });
+
+        if (megaWin_Disable) megaWin_Disable.onClick.RemoveAllListeners();
+        if (megaWin_Disable) megaWin_Disable.onClick.AddListener(disableMegaWinOnPress);
 
         if (Paytable_Button) Paytable_Button.onClick.RemoveAllListeners();
         if (Paytable_Button) Paytable_Button.onClick.AddListener(delegate { OpenPopup(PaytablePopup_Object); });
@@ -331,15 +338,24 @@ public class UIManager : MonoBehaviour
         if (WinPopup_Object) WinPopup_Object.SetActive(true);
         if (MainPopup_Object) MainPopup_Object.SetActive(true);
 
-        DOTween.To(() => initAmount, (val) => initAmount = val, amount, 5f).OnUpdate(() =>
+        megawin_TweenOne = DOTween.To(() => initAmount, (val) => initAmount = val, amount, 1f).OnUpdate(() =>
         {
-            if (Win_Text) Win_Text.text = initAmount.ToString();
+            if (Win_Text) Win_Text.text = initAmount.ToString("f3");
         });
 
-        DOVirtual.DelayedCall(6f, () =>
+        megawin_TweenTwo = DOVirtual.DelayedCall(2f, () =>
         {
             ClosePopup(WinPopup_Object);
-            slotManager.CheckPopups = false;
+            
+            if (slotManager.WasAutoSpinOn || slotManager.IsAutoSpin)
+            {
+                Invoke("disableMwinPopupReset", 2f);
+            }
+            else
+            {
+                slotManager.CheckPopups = false;
+            }
+
         });
     }
 
@@ -369,6 +385,28 @@ public class UIManager : MonoBehaviour
         //}
     }
 
+
+    private void disableMegaWinOnPress()
+    {
+        Debug.Log("PressedDisable");
+        megawin_TweenOne?.Kill();
+        megawin_TweenTwo?.Kill();
+        ClosePopup(WinPopup_Object);
+        Invoke("disableMwinPopupReset",2f);
+    }
+
+    internal void disableMwinPopupReset()
+    {
+        slotManager.CheckPopups = false;
+        if (slotManager.WasAutoSpinOn)
+        {
+            slotManager.callAutoSpinAgain();
+        }
+
+    }
+
+
+
     internal void InitialiseUIData(string SupportUrl, string AbtImgUrl, string TermsUrl, string PrivacyUrl, Paylines symbolsText)
     {
         //if (Support_Button) Support_Button.onClick.RemoveAllListeners();
@@ -390,15 +428,15 @@ public class UIManager : MonoBehaviour
             string text = null;
             if (paylines.symbols[i].Multiplier[0][0] != 0)
             {
-                text += "5x - " + paylines.symbols[i].Multiplier[0][0];
+                text += "5x - " + paylines.symbols[i].Multiplier[0][0]+"x";
             }
             if (paylines.symbols[i].Multiplier[1][0] != 0)
             {
-                text += "\n4x - " + paylines.symbols[i].Multiplier[1][0];
+                text += "\n4x - " + paylines.symbols[i].Multiplier[1][0]+"x";
             }
             if (paylines.symbols[i].Multiplier[2][0] != 0)
             {
-                text += "\n3x - " + paylines.symbols[i].Multiplier[2][0];
+                text += "\n3x - " + paylines.symbols[i].Multiplier[2][0]+"x";
             }
             if (SymbolsText[i]) SymbolsText[i].text = text;
         }
