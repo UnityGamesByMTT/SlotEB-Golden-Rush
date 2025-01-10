@@ -38,17 +38,19 @@ public class SocketIOManager : MonoBehaviour
     internal JSHandler _jsManager;
 
     protected string SocketURI = null;
-    protected string TestSocketURI = "https://7p68wzhv-5000.inc1.devtunnels.ms/";
+    protected string TestSocketURI = "http://localhost:5000/";
 
     [SerializeField]
     private string TestToken;
 
+   // protected string gameID = "";
     protected string gameID = "SL-GR";
 
     internal bool isLoaded = false;
-
+    
     private const int maxReconnectionAttempts = 6;
     private readonly TimeSpan reconnectionDelay = TimeSpan.FromSeconds(10);
+    Sprite[] TurboToggleSprites;//number of columns
 
     private void Awake()
     {
