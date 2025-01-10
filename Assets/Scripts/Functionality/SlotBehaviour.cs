@@ -332,12 +332,15 @@ public class SlotBehaviour : MonoBehaviour
 
     private void MaxBet()
     {
-        if (audioController) audioController.PlayButtonAudio();
-        BetCounter = SocketManager.initialData.Bets.Count - 1;
-        if (BetPerLine_text) BetPerLine_text.text = SocketManager.initialData.Bets[BetCounter].ToString();
-        if (TotalBet_text) TotalBet_text.text = (SocketManager.initialData.Bets[BetCounter] * Lines).ToString();
-        currentTotalBet = SocketManager.initialData.Bets[BetCounter] * Lines;
-        CompareBalance();
+        if (!WasAutoSpinOn)
+        {
+            if (audioController) audioController.PlayButtonAudio();
+            BetCounter = SocketManager.initialData.Bets.Count - 1;
+            if (BetPerLine_text) BetPerLine_text.text = SocketManager.initialData.Bets[BetCounter].ToString();
+            if (TotalBet_text) TotalBet_text.text = (SocketManager.initialData.Bets[BetCounter] * Lines).ToString();
+            currentTotalBet = SocketManager.initialData.Bets[BetCounter] * Lines;
+            CompareBalance();
+        }
     }
 
     void OnBetOne(bool IncDec)
