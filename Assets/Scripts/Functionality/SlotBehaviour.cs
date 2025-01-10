@@ -811,9 +811,11 @@ public class SlotBehaviour : MonoBehaviour
 
     internal void callAutoSpinAgain()
     {
-        
-        Debug.Log("callAutoSpinAgain");
-        AutoSpin();
+        if (AutoSpinStop_Button.gameObject.activeSelf)
+        {
+            Debug.Log("callAutoSpinAgain");
+            AutoSpin();
+        }
     }
 
 
