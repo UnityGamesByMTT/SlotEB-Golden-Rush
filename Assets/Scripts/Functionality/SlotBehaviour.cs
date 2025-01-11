@@ -656,8 +656,9 @@ public class SlotBehaviour : MonoBehaviour
         CheckWinPopups();
 
         yield return new WaitUntil(() => !CheckPopups);
-        if (!IsAutoSpin)
+        if (!IsAutoSpin && !WasAutoSpinOn)
         {
+            
             ToggleButtonGrp(true);
             IsSpinning = false;
         }
@@ -715,7 +716,7 @@ public class SlotBehaviour : MonoBehaviour
 
     void ToggleButtonGrp(bool toggle)
     {
-
+        
         if (SlotStart_Button) SlotStart_Button.interactable = toggle;
         if (LineBetPlus_Button) LineBetPlus_Button.interactable = toggle;
         if (LineBetMinus_Button) LineBetMinus_Button.interactable = toggle;
@@ -747,7 +748,6 @@ public class SlotBehaviour : MonoBehaviour
         {
             if (SocketManager.playerdata.currentWining > 0)
             {
-              
                 WasAutoSpinOn = true;
                 IsAutoSpin = false;
                 StopCoroutine(AutoSpinCoroutine());

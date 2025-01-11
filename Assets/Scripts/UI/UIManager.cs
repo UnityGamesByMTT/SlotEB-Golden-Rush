@@ -334,29 +334,37 @@ public class UIManager : MonoBehaviour
 
     private void StartPopupAnim(double amount)
     {
-        double initAmount = 0;
-        if (WinPopup_Object) WinPopup_Object.SetActive(true);
-        if (MainPopup_Object) MainPopup_Object.SetActive(true);
-
-        megawin_TweenOne = DOTween.To(() => initAmount, (val) => initAmount = val, amount, 1f).OnUpdate(() =>
+        if (!MainPopup_Object.activeSelf)
         {
-            if (Win_Text) Win_Text.text = initAmount.ToString("f3");
-        });
+            double initAmount = 0;
+            if (WinPopup_Object) WinPopup_Object.SetActive(true);
+            if (MainPopup_Object) MainPopup_Object.SetActive(true);
 
-        megawin_TweenTwo = DOVirtual.DelayedCall(2f, () =>
+            megawin_TweenOne = DOTween.To(() => initAmount, (val) => initAmount = val, amount, 1f).OnUpdate(() =>
+            {
+                if (Win_Text) Win_Text.text = initAmount.ToString("f3");
+            });
+
+            megawin_TweenTwo = DOVirtual.DelayedCall(2f, () =>
+            {
+                ClosePopup(WinPopup_Object);
+
+                if (slotManager.WasAutoSpinOn || slotManager.IsAutoSpin)
+                {
+                    Invoke("disableMwinPopupReset", 2f);
+                }
+                else
+                {
+                    slotManager.CheckPopups = false;
+                }
+
+            });
+        }
+        else
         {
-            ClosePopup(WinPopup_Object);
-            
-            if (slotManager.WasAutoSpinOn || slotManager.IsAutoSpin)
-            {
-                Invoke("disableMwinPopupReset", 2f);
-            }
-            else
-            {
-                slotManager.CheckPopups = false;
-            }
+            Invoke("disableMwinPopupReset", 2f);
+        }
 
-        });
     }
 
     internal void ADfunction()
