@@ -198,6 +198,7 @@ public class SlotBehaviour : MonoBehaviour
 
     private void CompareBalance()
     {
+
         if (currentBalance < currentTotalBet)
         {
             uiManager.LowBalPopup();
@@ -339,7 +340,7 @@ public class SlotBehaviour : MonoBehaviour
             if (BetPerLine_text) BetPerLine_text.text = SocketManager.initialData.Bets[BetCounter].ToString();
             if (TotalBet_text) TotalBet_text.text = (SocketManager.initialData.Bets[BetCounter] * Lines).ToString();
             currentTotalBet = SocketManager.initialData.Bets[BetCounter] * Lines;
-            CompareBalance();
+            
         }
     }
 
@@ -368,7 +369,7 @@ public class SlotBehaviour : MonoBehaviour
             if (BetPerLine_text) BetPerLine_text.text = SocketManager.initialData.Bets[BetCounter].ToString();
             if (TotalBet_text) TotalBet_text.text = (SocketManager.initialData.Bets[BetCounter] * Lines).ToString();
             currentTotalBet = SocketManager.initialData.Bets[BetCounter] * Lines;
-            CompareBalance();
+          
         }
     }
 
